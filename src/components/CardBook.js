@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { colors, metrics } from '../utils/themes';
 import Category from './Category';
-import { Caption, Text, Title } from './Typos';
+import { Text, Title } from './Typos';
 import StartRating from './StarRating';
 import BookCover from './BookCover'
 
@@ -37,7 +37,6 @@ const CardBook = (props) => {
             <StartRating rating={item.rating} />
           </View>
         </View>
-
       </Animated.View>
     </TouchableOpacity>
   );
@@ -49,11 +48,10 @@ export default CardBook;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginTop:10,
-    marginBottom:10,
+    marginBottom:20,
     backgroundColor: colors.white,
     borderRadius: metrics.radius,
-    width:'100%'
+    width:'100%',
   },
   cardHeader: {
   },

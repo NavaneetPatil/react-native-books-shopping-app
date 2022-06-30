@@ -3,13 +3,18 @@ export default [
     id: '1',
     image: require('./the-alchemist.jpg'),
     title: 'The Alchemist',
-    authors: ['Virat kolhi'],
+    authors: ['Paulo Coelho'],
     categories: ['Novel', 'Drama', 'Fantasy'],
-    readers: ['My Pal'],
+    readers: ['audioaz.com'],
     description:
       'The Alchemist is a novel by Brazilian author Paulo Coelho that was first published in 1988. Originally written in Portuguese, it became a widely translated international bestseller.',
     rating: 3.8,
-    price:120,
+    tracks: [
+      {
+        title: 'The Alchemist - Introduction',
+        link: 'https://www.bensound.com/bensound-music/bensound-anewbeginning.mp3',
+      },
+    ],
   },
   {
     id: '2',
@@ -17,7 +22,7 @@ export default [
     title: 'How to Win Friends and Influence People',
     authors: ['Dale Carnegie'],
     categories: ['Nonfiction', 'Self Help'],
-    readers: ['My Pal'],
+    readers: ['audioaz.com'],
     description: `You can go after the job you want...and get it! You can take the job you have...and improve it! You can take any situation you're in...and make it work for you!
 
 Since its release in 1936, How to Win Friends and Influence People has sold more than 15 million copies. Dale Carnegie's first book is a timeless bestseller, packed with rock-solid advice that has carried thousands of now famous people up the ladder of success in their business and personal lives.
@@ -26,7 +31,12 @@ As relevant as ever before, Dale Carnegie's principles endure, and will help you
       
 Learn the six ways to make people like you, the twelve ways to win people to your way of thinking, and the nine ways to change people without arousing resentment.`,
     rating: 4,
-    price:150,
+    tracks: [
+      {
+        title: '01. Phần 00',
+        link: 'https://www.bensound.com/bensound-music/bensound-anewbeginning.mp3',
+      },
+    ],
   },
   {
     id: '3',

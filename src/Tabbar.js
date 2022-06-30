@@ -2,13 +2,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-// import AccountScreen from './screens/AccountScreen';
-// import BookScreen from './screens/BookScreen';
-// import CategoryScreen from './screens/CategoryScreen';
-// import HomeScreen from './screens/HomeScreen';
-// import NewReviewScreen from './screens/NewReviewScreen';
-// import ReviewsScreen from './screens/ReviewsScreen';
-// import SearchScreen from './screens/SearchScreen';
 import Home from './screens/Home';
 import Shop from './screens/Shop';
 import ShopNested from './screens/ShopNested';
@@ -38,7 +31,14 @@ function HomeLibraryNavigator() {
         component={HomeScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Book Screen" component={BookScreen} />
+      <Stack.Screen
+        name="Book Screen"
+        component={BookScreen}
+        options={() => ({
+          headerShown: false,
+          tabBarStyle: undefined
+        })}
+      />
       <Stack.Screen name="My Cart" component={CartScreen} />
     </Stack.Navigator>
   );
@@ -49,9 +49,6 @@ function SearchNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="Shop1" component={Shop} />
       <Stack.Screen name="Shop2" component={ShopNested} />
-      {/* <Stack.Screen name="BookScreen" component={BookScreen} />
-      <Stack.Screen name="ReviewsScreen" component={ReviewsScreen} />
-      <Stack.Screen name="NewReviewScreen" component={NewReviewScreen} /> */}
     </Stack.Navigator>
   );
 }
@@ -91,16 +88,6 @@ const TabbarStack = () => {
           ),
         }}
       />
-      {/* <Tab.Screen
-        name="MyCart"
-        component={CartScreen}
-        options={{
-          tabBarLabel: 'MyCart',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="menu" color={color} size={size} />
-          ),
-        }}
-      /> */}
     </Tab.Navigator>
   );
 };

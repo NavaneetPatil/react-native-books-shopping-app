@@ -6,11 +6,10 @@ class PrimaryHeader extends Component {
     render() {
         const { children } = this.props;
         return (
-            <Animated.View
+            <View
                 style={
                     [
                         styles.container,
-                        // { transform: [{ translateY: animatedY }] }
                     ]
                 }
             >
@@ -19,7 +18,7 @@ class PrimaryHeader extends Component {
                     style={styles.headerBg}
                 />
                 {children}
-            </Animated.View>
+            </View>
         );
     }
 }

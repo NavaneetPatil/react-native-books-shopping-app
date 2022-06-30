@@ -6,7 +6,7 @@ import {
     View,
 } from 'react-native';
 import { colors, metrics } from '../utils/themes';
-import { Caption, Text, Title } from './Typos';
+import { Text, Title } from './Typos';
 import BookCover from './BookCover';
 import ButtonLink from './ButtonLink';
 const CartCard = (props) => {

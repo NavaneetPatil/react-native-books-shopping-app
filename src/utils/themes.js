@@ -1,21 +1,6 @@
-import {Dimensions, Platform, StatusBar} from 'react-native';
+import {Dimensions} from 'react-native';
 
 const {height, width} = Dimensions.get('window');
-const isIphoneXGen =
-  Platform.OS === 'ios' &&
-  (height === 812 ||
-    width === 812 ||
-    height === 896 ||
-    width === 896 ||
-    height === 844 ||
-    width === 844 ||
-    height === 926 ||
-    width === 926);
-const statusBarHeight = Platform.select({
-  ios: isIphoneXGen ? 44 : 24,
-  android: StatusBar.currentHeight,
-});
-const headerHeight = isIphoneXGen ? 130 - statusBarHeight : 84;
 
 const metrics = {
   padding: 15,
@@ -28,13 +13,11 @@ const metrics = {
   coverHeight: 168,
   coverWidthSmall: 66,
   coverHeightSmall: 108,
-  statusBarHeight: statusBarHeight,
-  headerHeightHalf: headerHeight / 2,
-  headerHeight: headerHeight,
-  headerHeightX2: headerHeight * 2,
-  headerHeightX3: headerHeight * 3,
+  headerHeightHalf: 84 / 2,
+  headerHeight: 50,
+  headerHeightX2: 84 * 2,
+  headerHeightX3: 84 * 3,
   tabbarHeight: 49,
-  bottomSpaceHeight: isIphoneXGen ? 34 : 0,
 };
 
 const colors = {
@@ -54,19 +37,6 @@ const colors = {
   background: '#f1f1f1',
   star: '#fe8302',
   transparent: 'transparent',
-  shadow: {
-    ...Platform.select({
-      ios: {
-        shadowColor: 'rgba(0, 0, 0, 0.9)',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.15,
-        shadowRadius: 15,
-      },
-      android: {
-        elevation: 1,
-      },
-    }),
-  },
 };
 
 export {metrics, colors};

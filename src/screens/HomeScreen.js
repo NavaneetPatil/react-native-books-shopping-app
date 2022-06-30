@@ -8,6 +8,7 @@ import BOOKS_DATA from '../sampledata/books';
 import { useDispatch } from 'react-redux';
 import * as actionTypes from '../store/ActionTypes';
 import HomeTitleBar from '../components/HomeTitleBar';
+import CategorySelector from '../components/CategorySelector';
 
 const LOGO_SIZE = 24;
 const HEADER_OFFSET = metrics.screenWidth / 2 - 40;
@@ -31,25 +32,26 @@ const HomeScreen = ({ navigation }) => {
 
 
   return (
-      <View style={styles.container}>
-        <HomeTitleBar cartOnPress={()=>navigation.navigate('My Cart')}/>
-        <AnimatedFlatList
-          data={books}
-          // keyExtractor={(item, index) => index.toString()}
-          // ListHeaderComponent={<><View style={styles.headerComponent} /><View><Text>Hye threr</Text></View></>}
-          renderItem={({ item, index }) => (
-            <CardBook
-              item={item}
-              index={index % PAGE_SIZE}
-              onPress={() =>
-                navigation.navigate('Book Screen', {
-                  id: item.id,
-                  item: item,
-                })}
-            />
-          )}
-        />
-      </View>
+    <View style={styles.container}>
+      <HomeTitleBar cartOnPress={() => navigation.navigate('My Cart')} />
+      <CategorySelector/>
+      <AnimatedFlatList
+        data={books}
+        // keyExtractor={(item, index) => index.toString()}
+        // ListHeaderComponent={<><View style={styles.headerComponent} /><View><Text>Hye threr</Text></View></>}
+        renderItem={({ item, index }) => (
+          <CardBook
+            item={item}
+            index={index % PAGE_SIZE}
+            onPress={() =>
+              navigation.navigate('Book Screen', {
+                id: item.id,
+                item: item,
+              })}
+          />
+        )}
+      />
+    </View>
   );
 }
 
@@ -60,8 +62,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     marginLeft: 12,
     marginRight: 12,
-    marginBottom:12,
-    marginTop:12
+    marginBottom: 12,
+    marginTop: 12
   },
   headerTitle: {
     position: 'absolute',

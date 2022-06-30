@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   Animated,
   ScrollView,
@@ -9,27 +9,29 @@ import {
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import BookCover from '../components/BookCover';
-// import ButtonNewReview from '../components/ButtonNewReview';
-// import ButtonPlay from '../components/ButtonPlay';
 import Category from '../components/Category';
 import FooterSpace from '../components/FooterSpace';
-// import Header from '../components/Header';
-// import Reviews from '../components/Reviews';
+import Header from '../components/Header';
 import SectionHeader from '../components/SectionHeader';
 import StarRating from '../components/StarRating';
 import { SubText, Text, TextButton, Title } from '../components/Typos';
-// import PlayerControl from '../helpers/PlayerControl';
-// import PLAYER_STATUS from '../utils/playerStatus';
 import { colors, metrics } from '../utils/themes';
 import { useDispatch } from 'react-redux';
 import * as actionTypes from '../store/ActionTypes';
+import Player from '../components/Player';
+import { useNavigation } from '@react-navigation/native';
 
 const BookScreen = (props) => {
   const [collapsed, setCollapsed] = useState(true);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.getParent()?.setOptions({ tabBarStyle: { display: "none" }});
+    // return () => navigation.getParent()?.setOptions({ tabBarStyle: undefined });
+  }, [navigation]);
 
   const addToCartHandler = (item) => {
-    // console.log('item:', item)
     // add this product in redux cart variable
     dispatch(
       {
@@ -50,6 +52,14 @@ const BookScreen = (props) => {
 
   return (
     <View style={styles.container}>
+      <Header
+        hasBackButton
+        title={item.title}
+        rightButton={{
+          onPress: () => this.play(0),
+          iconName: 'headphones',
+        }}
+      />
       <Animated.ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
@@ -66,6 +76,24 @@ const BookScreen = (props) => {
           <StarRating rating={item.rating} />
           <View><Text>Buy paperback for Rs.{item.price}</Text></View>
         </View>
+        <ScrollView style={styles.playlist}>
+          {item.tracks &&
+            item.tracks.map((track, index) => (
+              <TouchableOpacity key={index}>
+                <View style={styles.chapter}>
+                  <Feather
+                    name="play-circle"
+                    size={24}
+                    color={colors.primary}
+                    style={styles.chapterIcon}
+                  />
+                  <View>
+                    <TextButton>{track.title}</TextButton>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))}
+        </ScrollView>
         <SectionHeader title="Summary" />
         {collapsed ? (
           <View>
@@ -101,6 +129,7 @@ const BookScreen = (props) => {
         </View>
         <FooterSpace />
       </Animated.ScrollView>
+      <Player />
     </View>
   );
 
