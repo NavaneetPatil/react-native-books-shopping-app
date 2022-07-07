@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Animated,
   ScrollView,
@@ -21,13 +21,141 @@ import * as actionTypes from '../store/ActionTypes';
 import Player from '../components/Player';
 import { useNavigation } from '@react-navigation/native';
 
+import Sound from 'react-native-sound';
+Sound.setActive(true);
+Sound.setCategory('Playback', true);
+
 const BookScreen = (props) => {
   const [collapsed, setCollapsed] = useState(true);
   const dispatch = useDispatch();
 
+
+  /////////----------------------
+  let book = null;
+  let track = null;
+  let soundPointer = null;
+
+  const load = (book, trackIndex = 0) => {
+    const bookTrack = book?.tracks?.[trackIndex];
+    if (!bookTrack || !bookTrack.link) {
+      return;
+    }
+    if (soundPointer) {
+      if (soundPointer._filename === bookTrack.link) {
+        togglePlay();
+        return;
+      } else {
+        unloadAudio();
+      }
+    }
+
+    book = book;
+    track = bookTrack;
+    track.index = trackIndex;
+    dispatch({
+      type: 'LOAD_AUDIO',
+      payload: {
+        book,
+        track,
+      }
+    });
+    soundPointer = new Sound(track.link, '', onLoadAudio.bind(this));
+  }
+
+  const getCurrentTime = () => {
+    return new Promise(resolve => {
+      if (!soundPointer) {
+        resolve(0);
+      }
+      soundPointer.getCurrentTime(seconds =>
+        resolve(parseInt(seconds, 10)),
+      );
+    });
+  }
+
+  const playAudio = () => {
+    if (!soundPointer) {
+      return;
+    }
+    dispatch({
+      type: 'PLAY_AUDIO',
+      payload: {
+        duration: Number(soundPointer.getDuration()),
+      }
+    });
+    soundPointer.play(onPlayEnd());
+  }
+
+  const pauseAudio = () => {
+    if (!soundPointer) {
+      return;
+    }
+    dispatch({
+      type: 'PAUSE_AUDIO',
+    });
+    soundPointer.pause();
+  }
+
+  const onPlayEnd = (success) => {
+    if (success) {
+      dispatch({
+        type: 'PLAY_AUDIO_ENDED',
+      });
+      const nextTrackIndex = track.index + 1;
+      const nextTrack = book.tracks[nextTrackIndex];
+      if (nextTrack && nextTrack.link) {
+        load(book, nextTrackIndex);
+      }
+    }
+  }
+
+  const onLoadAudio = (error) => {
+    if (error) {
+      dispatch({
+        type: 'LOAD_AUDIO_ERROR',
+      });
+      return;
+    }
+    playAudio();
+  }
+
+  const togglePlay = () => {
+    if (!soundPointer) {
+      return;
+    }
+    if (soundPointer._playing) {
+      console.log('pause the audio')
+      pauseAudio();
+    } else {
+      console.log('play the audio')
+      playAudio();
+    }
+  }
+
+  const stop = () => {
+    if (!soundPointer) {
+      return;
+    }
+    soundPointer.stop();
+  }
+
+  const unloadAudio = () => {
+    dispatch({
+      type: 'UNLOAD_AUDIO',
+    });
+    if (soundPointer) {
+      soundPointer.stop();
+      soundPointer.release();
+      soundPointer.reset();
+      soundPointer = null;
+    }
+  }
+
+  ///////---------------
+
   const navigation = useNavigation();
   useEffect(() => {
-    navigation.getParent()?.setOptions({ tabBarStyle: { display: "none" }});
+    navigation.getParent()?.setOptions({ tabBarStyle: { display: "none" } });
     // return () => navigation.getParent()?.setOptions({ tabBarStyle: undefined });
   }, [navigation]);
 
@@ -42,10 +170,18 @@ const BookScreen = (props) => {
 
   }
 
+
   // getting book data from props, when ever we navigate using react
   // native routing to a page it carries info in props route paramerters
   const { route } = props;
   const item = route.params.item;
+
+
+
+  const play = (trackIndex = 0) => {
+    // update redux player
+    load(item, trackIndex);
+  }
 
   // const isPlaying =
   //   player.status === PLAYER_STATUS.PLAYING && player.book.id === item.id;
@@ -56,7 +192,7 @@ const BookScreen = (props) => {
         hasBackButton
         title={item.title}
         rightButton={{
-          onPress: () => this.play(0),
+          onPress: () => play(0),
           iconName: 'headphones',
         }}
       />
@@ -129,7 +265,7 @@ const BookScreen = (props) => {
         </View>
         <FooterSpace />
       </Animated.ScrollView>
-      <Player />
+      <Player playPause={togglePlay} getCurrentTime={getCurrentTime} />
     </View>
   );
 

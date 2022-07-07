@@ -14,7 +14,11 @@ export default totalSeconds => {
   }
 
   if (time === '') {
-    time = seconds;
+    if (seconds < 9) {
+      time = '0:0' + seconds;
+    } else {
+      time = '0:' + seconds;
+    }
   } else {
     time += seconds < 10 ? '0' + seconds : String(seconds);
   }

@@ -17,7 +17,7 @@ const CardBook = (props) => {
   const { item, onPress } = props;
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={()=>onPress()}
       activeOpacity={1}
     >
       <Animated.View
